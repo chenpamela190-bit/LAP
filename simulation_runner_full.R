@@ -15,10 +15,7 @@
 #                                 Ctrl + Shift + S  (Windows)
 #             Or: click the "Source" button at the top-right of the editor.
 #
-#           WHY SOURCE and not Run?
-#           "Run" executes only the selected line(s). "Source" executes the
-#           entire file top-to-bottom, so all functions are defined before
-#           the simulation loop tries to use them.
+#
 #
 # STEP 4 — Always start with RUN_MODE <- "test" first.
 #           This runs 5 reps per condition (~15 min) to check for errors.
