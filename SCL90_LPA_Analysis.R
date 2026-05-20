@@ -1,11 +1,6 @@
 # =============================================================================
 # Hard Assignment vs. Probability-Weighted Summarization in LPA
 # A Methodological Study Using the SCL-90
-#
-# Purpose : Full analysis pipeline for journal submission
-# Author  : [Your Name]
-# Date    : April 2026
-# Target  : Psychological Methods / Multivariate Behavioral Research
 # =============================================================================
 #
 # PAPER OUTPUTS PRODUCED BY THIS SCRIPT
