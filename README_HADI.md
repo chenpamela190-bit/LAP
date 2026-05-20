@@ -113,7 +113,6 @@ All code in this repository is publicly available at:
 |----------|--------|
 | Simulation code and functions | Publicly available (this repository) |
 | Synthetic SCL-90-R demo data | Publicly available (this repository) |
-| Simulation summary outputs | Publicly available (this repository) |
 | Empirical SCL-90-R dataset | **Not available** — confidential institutional records |
 
 ---
