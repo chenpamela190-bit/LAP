@@ -2,7 +2,6 @@
 # EMPIRICAL ILLUSTRATION: HADI Diagnostics Applied to SCL-90-R Data
 # Paper: "When Is Hard Class Assignment Defensible?"
 # Script: empirical_illustration_SCL90R.R
-# Author: [Author]
 # Date:   2026-05-04
 #
 # Requires: mclust, readxl, dplyr, tidyr, ggplot2, e1071, clue
