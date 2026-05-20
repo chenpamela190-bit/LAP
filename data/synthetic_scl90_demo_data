@@ -1,0 +1,120 @@
+# =============================================================================
+# create_synthetic_scl90_demo_data.R
+#
+# PURPOSE:
+#   Generate a SYNTHETIC, ARTIFICIAL demonstration dataset with the same
+#   variable names as the empirical SCL-90-R illustration used in:
+#
+#   "When Is Hard Class Assignment Defensible? Introducing the Hard-Assignment
+#    Distortion Index (HADI) for Latent Profile and Latent Class Analysis"
+#
+# IMPORTANT DISCLAIMER:
+#   This script produces ARTIFICIAL DATA ONLY.
+#   - No real participant records are included.
+#   - This dataset does NOT reproduce the confidential institutional
+#     SCL-90-R screening dataset used in the manuscript.
+#   - The real empirical dataset is not publicly available due to
+#     participant confidentiality and institutional data-governance
+#     restrictions.
+#   - This synthetic dataset is provided solely for code execution,
+#     workflow demonstration, and reproducibility transparency.
+#
+# OUTPUT:
+#   data/synthetic_scl90_demo_data.csv
+#
+# VARIABLES:
+#   ID    - Participant identifier (integer)
+#   Class - Assigned latent class (1=Minimal, 2=Mild, 3=Moderate, 4=High)
+#   SOM   - Somatisation subscale mean (scale: 1-5)
+#   OCD   - Obsessive-Compulsive subscale mean (scale: 1-5)
+#   IS    - Interpersonal Sensitivity subscale mean (scale: 1-5)
+#   DEP   - Depression subscale mean (scale: 1-5)
+#   ANX   - Anxiety subscale mean (scale: 1-5)
+#   HOS   - Hostility subscale mean (scale: 1-5)
+#   PHOB  - Phobic Anxiety subscale mean (scale: 1-5)
+#   PAR   - Paranoid Ideation subscale mean (scale: 1-5)
+#   PSY   - Psychoticism subscale mean (scale: 1-5)
+#
+# CLASS PROPORTIONS (approximate, matching empirical illustration):
+#   Class 1 (Minimal)   ~59.5%
+#   Class 2 (Mild)      ~23.8%
+#   Class 3 (Moderate)  ~11.8%
+#   Class 4 (High)       ~4.9%
+# =============================================================================
+
+set.seed(20240101)
+
+# -----------------------------------------------------------------------------
+# Parameters
+# -----------------------------------------------------------------------------
+
+N          <- 1000
+subscales  <- c("SOM", "OCD", "IS", "DEP", "ANX", "HOS", "PHOB", "PAR", "PSY")
+class_sizes <- c(595, 238, 118, 49)
+class_labels <- c("Minimal", "Mild", "Moderate", "High")
+
+# Class-level profile means (1-5 scale) and within-class SD
+# Reflects minimal -> mild -> moderate -> high severity gradient
+class_params <- list(
+  list(means = c(1.25,1.30,1.22,1.20,1.18,1.25,1.10,1.20,1.12), sd = 0.22), # Class 1
+  list(means = c(1.75,1.85,1.78,1.80,1.72,1.70,1.55,1.75,1.65), sd = 0.28), # Class 2
+  list(means = c(2.55,2.65,2.60,2.70,2.58,2.50,2.30,2.55,2.45), sd = 0.32), # Class 3
+  list(means = c(3.50,3.65,3.55,3.72,3.60,3.45,3.30,3.50,3.40), sd = 0.35)  # Class 4
+)
+
+# -----------------------------------------------------------------------------
+# Generate synthetic data
+# -----------------------------------------------------------------------------
+
+clamp <- function(x, lo = 1.0, hi = 5.0) pmax(lo, pmin(hi, x))
+
+all_rows <- vector("list", 4)
+
+for (k in 1:4) {
+  n_k  <- class_sizes[k]
+  mu   <- class_params[[k]]$means
+  sig  <- class_params[[k]]$sd
+
+  mat <- matrix(NA, nrow = n_k, ncol = length(subscales))
+  for (j in seq_along(subscales)) {
+    mat[, j] <- round(clamp(rnorm(n_k, mean = mu[j], sd = sig)), 2)
+  }
+
+  df_k        <- as.data.frame(mat)
+  names(df_k) <- subscales
+  df_k$Class  <- k
+  all_rows[[k]] <- df_k
+}
+
+dat <- do.call(rbind, all_rows)
+
+# Shuffle rows and assign sequential IDs
+dat      <- dat[sample(nrow(dat)), ]
+dat$ID   <- seq_len(nrow(dat))
+dat      <- dat[, c("ID", "Class", subscales)]
+
+# -----------------------------------------------------------------------------
+# Save output — create /data folder if needed
+# -----------------------------------------------------------------------------
+
+if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+
+out_path <- file.path("data", "synthetic_scl90_demo_data.csv")
+write.csv(dat, out_path, row.names = FALSE)
+
+# -----------------------------------------------------------------------------
+# Summary
+# -----------------------------------------------------------------------------
+
+cat("=====================================================\n")
+cat("Synthetic demonstration data written to:", out_path, "\n")
+cat("Total N =", nrow(dat), "\n\n")
+cat("Class distribution:\n")
+tab <- table(dat$Class)
+for (k in 1:4) {
+  cat(sprintf("  Class %d (%s): n = %d (%.1f%%)\n",
+              k, class_labels[k], tab[[k]], tab[[k]] / nrow(dat) * 100))
+}
+cat("\nDISCLAIMER: ARTIFICIAL DATA ONLY.\n")
+cat("Does not contain or reproduce any real participant records.\n")
+cat("=====================================================\n")
