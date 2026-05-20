@@ -103,7 +103,7 @@ All simulation outputs are also provided pre-computed in `outputs/simulation_sum
 ## Code Availability
 
 All code in this repository is publicly available at:
-**[INSERT PUBLIC REPOSITORY LINK]**
+**(https://github.com/chenpamela190-bit/HADI)**
 
 ---
 
@@ -118,15 +118,6 @@ All code in this repository is publicly available at:
 
 ---
 
-## Citation
-
-If you use HADI or code from this repository, please cite:
-
-> [AUTHOR(S)]. (in press). When Is Hard Class Assignment Defensible? Introducing
-> the Hard-Assignment Distortion Index (HADI) for Latent Profile and Latent Class
-> Analysis. *Behavior Research Methods*.
-
----
 
 ## Contact
 
